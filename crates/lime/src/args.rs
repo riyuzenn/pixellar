@@ -24,5 +24,10 @@ pub struct Arguments {
     /// Default: true
     #[arg(short, long)]
     pub debug: Option<bool>,
+
+    /// Set the server version
+    /// Default: cargo version
+    #[arg(short, long)]
+    pub ver: Option<String>,
     
 }
