@@ -1,19 +1,17 @@
-use clap::Parser;
-use fern::colors::{Color, ColoredLevelConfig};
 use log::{debug, info, warn};
 use colored::Colorize;
 use anyhow::Result;
+use clap::Parser;
+use fern::colors::{Color, ColoredLevelConfig};
+
+use lime::address::Address;
+use lime::server::Server;
+use lime::utils::Version;
+use lime::utils::bunny;
+
 
 mod args;
-mod utils;
-mod server;
-mod address;
-
-use crate::address::Address;
 use crate::args::Arguments;
-use crate::server::Server;
-use crate::utils::Version;
-use crate::utils::bunny;
 
 fn main() -> Result<()> {
     let arg = Arguments::parse();
@@ -45,7 +43,7 @@ fn main() -> Result<()> {
         addr.port,
         size,
         debug,
-        version
+        version.clone()
     );
     info!("Server object is created & running");
     server.run_server(0);

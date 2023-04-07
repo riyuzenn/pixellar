@@ -2,13 +2,15 @@ use enet::*;
 use std::{net::Ipv4Addr, time::Duration};
 use anyhow::Context;
 use colored::Colorize;
-use crate::utils::Version;
 use log::{
     warn,
     info,
     debug,
     error
 };
+
+
+use crate::Version;
 
 pub struct Server {
     host: Ipv4Addr,

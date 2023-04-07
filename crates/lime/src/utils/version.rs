@@ -4,7 +4,9 @@ use anyhow::{
     Context
 };
 use colored::Colorize;
+use serde::{Serialize, Deserialize};
 
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Version {
     pub major: u8,
     pub minor: u8,
