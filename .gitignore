@@ -1,4 +1,5 @@
 target/
 db/
 Cargo.lock
-
+logs/
+server.log
