@@ -5,8 +5,10 @@ use anyhow::{
 };
 
 pub use crate::utils::version::Version;
-pub mod version;
+pub use crate::utils::bunny::say;
 
+pub mod version;
+pub mod bunny;
 
 pub fn host_to_vec(host: &str) -> Result<Vec<u8>> {
     let mut h = Vec::new();
