@@ -2,8 +2,20 @@
 
 A simple toy game server written in Rust to test my skill in networking.
 
-## Features
+<div align="">
+<table>
+<tbody>
+<td align="center">
+:warning: messy code. i'am trying to make everything readable and understandable as possible
+</td>
+</tbody>
+</table>
+</div>
 
+## Features
+* [x] It works
+
+## Planned
 * [ ] Server versioning
 * [ ] Chat system
 * [ ] Encrypted packet
