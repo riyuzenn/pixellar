@@ -1,10 +1,7 @@
-use std::net::Ipv4Addr;
 use clap::Parser;
 use fern::colors::{Color, ColoredLevelConfig};
 use log::{debug, info, warn};
-use colored::Colorize;
 use anyhow::Result;
-use std::time::Duration;
 
 mod args;
 mod utils;
@@ -43,7 +40,8 @@ fn main() -> Result<()> {
         debug,
         version
     );
-    info!("Server object created");
+    info!("Server object is created & running");
+    server.run_server(0);
 
     Ok(())
 }
