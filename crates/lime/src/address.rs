@@ -17,14 +17,6 @@ impl Address {
             port: p
         }
     }
-
-    pub fn set_host(&mut self, host: &str) {
-        let hv = host_to_vec(host).unwrap();
-        self.host = Ipv4Addr::new(hv[0], hv[1], hv[2], hv[3]);
-    }
-
-    pub fn set_port(&mut self, port: u16) {
-        self.port = port
-    }
+   
 }
 
