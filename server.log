@@ -1,7 +1,0 @@
-[2023-04-07][21:19:55][lime][DEBUG] Logging setup finisehd
-[2023-04-07][21:19:55][lime][DEBUG] Creating Server object
-[2023-04-07][21:19:55][lime][INFO] Server object created
-[2023-04-07][21:23:08][lime][DEBUG] Logging setup finisehd
-[2023-04-07][21:23:08][lime][DEBUG] Creating Server object
-[2023-04-07][21:23:08][lime][INFO] Server object is created & running
-[2023-04-07][21:23:08][lime::server][INFO] Server service [32mstarted[0m. Listening to [33mevents[0m
