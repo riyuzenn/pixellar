@@ -9,12 +9,12 @@ pub fn say(text: &str) {
     let len = strlen(text);
  
     let mut forward = String::from("");
-    forward.push_str(&String::from("-").repeat((len/2) - 2));
-    forward.push_str("<");
+    forward.push_str(&String::from("-").repeat((len/2) - 1));
+    forward.push_str(">");
     forward.push_str(&String::from("-").repeat(len/2));
     
     let mut backward = String::from("");
-    backward.push_str(&String::from("-").repeat((len/2) - 2));
+    backward.push_str(&String::from("-").repeat((len/2) - 1));
     backward.push_str("<");
     backward.push_str(&String::from("-").repeat(len/2));
     
