@@ -1,6 +1,7 @@
 use clap::Parser;
 use fern::colors::{Color, ColoredLevelConfig};
 use log::{debug, info, warn};
+use colored::Colorize;
 use anyhow::Result;
 
 mod args;
@@ -10,8 +11,9 @@ mod address;
 
 use crate::address::Address;
 use crate::args::Arguments;
-use crate::utils::Version;
 use crate::server::Server;
+use crate::utils::Version;
+use crate::utils::bunny;
 
 fn main() -> Result<()> {
     let arg = Arguments::parse();
@@ -31,7 +33,12 @@ fn main() -> Result<()> {
     
     let addr = Address::new(&host, port);
     let version = Version::from(&ver)?;
-    
+
+    let name = "Pixellar".red();
+    let text = format!("▲ Welcome to {} Server v{}", name, version.to_string().yellow());
+
+    bunny::say(&text);
+        
     debug!("Creating Server object");
     let server = Server::new(
         addr.host,
