@@ -13,7 +13,7 @@ A simple toy game server written in Rust to test my skill in networking.
 </div>
 
 ## Features
-* [x] It works
+* [x] idk, maybe it works
 
 ## Planned
 * [ ] Server versioning
