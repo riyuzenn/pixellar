@@ -1,3 +1,5 @@
+# I have no idea why i created this ― probably to automate the copyright notice instead of manually pasting it.
+
 TARGET=/target/debug
 
 .PHONY: help, copyright
