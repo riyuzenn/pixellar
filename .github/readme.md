@@ -1,4 +1,5 @@
 ## Pixellar
+> NOTE: I only work on this project with my spare time
 
 A simple toy game server written in Rust to test my skill in networking.
 
@@ -11,6 +12,8 @@ A simple toy game server written in Rust to test my skill in networking.
 </tbody>
 </table>
 </div>
+
+
 
 ## Features
 * [x] idk, it should work
