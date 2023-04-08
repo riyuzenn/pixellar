@@ -46,42 +46,26 @@ impl PacketData {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct PacketRawData {
-    data: Vec<u8>,
-    version: Version,
-}
-
-
-impl PacketRawData {
-    pub fn new(d: Vec<u8>, v: Version) -> Self {
-        PacketRawData { data: d, version: v }
-    }
-
-    /// Build the packet 
-    pub fn build(&self) {
-
-    }
-}
-
 pub struct Packet {
     pkt: enet::Packet,
 }
 
 impl Packet {
-    pub fn new(d: Vec<u8>, packet_mode: PacketMode) -> Self {
-        
-        let p = enet::Packet::new(d, packet_mode).unwrap();
+    pub fn new(d: PacketData, packet_mode: PacketMode) -> Self {
+        let data = d.build().unwrap();
+
+        let p = enet::Packet::new(data, packet_mode).unwrap();
         Packet {
             pkt: p
         }
     }
 
-    pub fn build(&self) {
+    /// Create a new encrypted packet
+    pub fn new_encrypted(d: PacketData, packet_mode: PacketMode) -> Self {
 
     }
 
-    pub fn send(&self, peer: enet::Peer<()>) {
+    pub fn send(&self, peer: &mut enet::Peer<()>) {
         
     }
 }

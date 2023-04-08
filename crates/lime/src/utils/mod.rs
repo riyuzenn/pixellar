@@ -16,10 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+use std::path::{Path, PathBuf};
+
 use anyhow::{
     Result,
     Context
 };
+use pickledb::{PickleDb, PickleDbDumpPolicy, SerializationMethod};
 
 pub use crate::utils::version::Version;
 pub use crate::utils::bunny::say;
@@ -41,3 +44,34 @@ pub fn host_to_vec(host: &str) -> Result<Vec<u8>> {
 
     Ok(h)
 }
+
+pub fn get_db_path() -> PathBuf {
+    let p = Path::new("./db");
+    if !p.exists() {
+        std::fs::create_dir(p).unwrap();
+    }
+    p.to_owned()
+}
+
+pub fn load_db(name: &str) -> Result<PickleDb, anyhow::Error> {
+    let db_env = get_db_path();
+    let db_path = db_env.join(format!("{}.db", name));
+    if db_path.exists() {
+        
+        Ok(
+            PickleDb::load_json(
+                db_path, 
+                PickleDbDumpPolicy::DumpUponRequest
+            ).context("Failed to open database path.")?
+        )
+    } else {
+        Ok(
+            PickleDb::new(
+                db_path,
+                PickleDbDumpPolicy::DumpUponRequest,
+                SerializationMethod::Json
+            )
+        )
+    }
+}
+

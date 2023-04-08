@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 use enet::*;
+use pickledb::PickleDb;
 use std::{net::Ipv4Addr, time::Duration};
 use anyhow::Context;
 use colored::Colorize;
@@ -27,15 +28,18 @@ use log::{
 };
 
 
-use crate::Version;
+use crate::{Version, utils::load_db, data::active::ActiveWorld, packet::Packet};
 
 pub struct Server {
     host: Ipv4Addr,
     port: u16,
     peer_count: u64,
     enet: Enet,
+    enet_host: enet::Host<()>,
     debug: bool,
-    version: Version
+    version: Version,
+    active_player: PickleDb,
+    active_world: PickleDb
 }
 
 #[allow(dead_code)]
@@ -52,31 +56,39 @@ impl Server {
         port: u16,
         peer_count: u64,
         debug: bool,
-        v: Version
+        v: Version, 
+
     ) -> Self {
 
         let enet_obj = Enet::new().context("Failed to initialize ENet object").unwrap();
+        let active_player = load_db("active_player").unwrap();
+        let active_world = load_db("active_world").unwrap();
+
+        let eh = enet_obj.create_host::<()>(
+
+            Some(&Address::new(host.clone(), port.clone())),
+            peer_count.clone(),
+            ChannelLimit::Maximum,
+            BandwidthLimit::Unlimited,
+            BandwidthLimit::Unlimited
+
+        ).context("Failed to create ENet host").unwrap();
+
         Server {
             host: host,
             port: port,
             peer_count: peer_count,
             debug: debug,
             version: v,
-            enet: enet_obj
+            enet: enet_obj,
+            enet_host: eh,
+            active_player: active_player,
+            active_world: active_world
         }
     }
 
     pub fn run_server(&self, duration: u64) {
-        let mut host = self.enet.create_host::<()>(
-
-            Some(&Address::new(self.host, self.port)),
-            self.peer_count,
-            ChannelLimit::Maximum,
-            BandwidthLimit::Unlimited,
-            BandwidthLimit::Unlimited
-
-        ).context("Failed to create ENet host").unwrap();
-        host.set_checksum_crc32(); 
+        self.enet_host.set_checksum_crc32(); 
         
         self.log(
             &format!("Server service {0}. Listening to {1}", 
@@ -88,7 +100,7 @@ impl Server {
 
         loop {
         
-            if let Some(event) = host
+            if let Some(event) = self.enet_host
                 .service(Duration::from_secs(duration))
                 .context("Service failure").unwrap()
 
@@ -125,8 +137,16 @@ impl Server {
         
     }
 
+    pub fn broadcast_world(&self, world_name: &str, packet: Packet) {
+        if self.active_world.exists(world_name) {
+            let world = self.active_world.get::<ActiveWorld>(world_name).unwrap();
+            for player in world.players {
+                let peer = self.enet_host.peer_mut(player.connect_id).unwrap();
+                packet.send(peer);
+            }
+        }
+    }
     
-
     fn log(&self, msg: &str, r#type: Log) {
         if self.debug {
             match r#type {
