@@ -35,7 +35,6 @@ pub struct Server {
     port: u16,
     peer_count: u64,
     enet: Enet,
-    enet_host: enet::Host<()>,
     debug: bool,
     version: Version,
     active_player: PickleDb,
@@ -64,16 +63,6 @@ impl Server {
         let active_player = load_db("active_player").unwrap();
         let active_world = load_db("active_world").unwrap();
 
-        let eh = enet_obj.create_host::<()>(
-
-            Some(&Address::new(host.clone(), port.clone())),
-            peer_count.clone(),
-            ChannelLimit::Maximum,
-            BandwidthLimit::Unlimited,
-            BandwidthLimit::Unlimited
-
-        ).context("Failed to create ENet host").unwrap();
-
         Server {
             host: host,
             port: port,
@@ -81,14 +70,23 @@ impl Server {
             debug: debug,
             version: v,
             enet: enet_obj,
-            enet_host: eh,
             active_player: active_player,
             active_world: active_world
         }
     }
 
-    pub fn run_server(&self, duration: u64) {
-        self.enet_host.set_checksum_crc32(); 
+    pub fn run_server(self, duration: u64) {
+        let mut host = self.enet.create_host::<()>(
+
+            Some(&Address::new(self.host, self.port)),
+            self.peer_count,
+            ChannelLimit::Maximum,
+            BandwidthLimit::Unlimited,
+            BandwidthLimit::Unlimited
+
+        ).context("Failed to create ENet host").unwrap();
+
+        host.set_checksum_crc32(); 
         
         self.log(
             &format!("Server service {0}. Listening to {1}", 
@@ -100,7 +98,7 @@ impl Server {
 
         loop {
         
-            if let Some(event) = self.enet_host
+            if let Some(event) = host
                 .service(Duration::from_secs(duration))
                 .context("Service failure").unwrap()
 
@@ -137,11 +135,11 @@ impl Server {
         
     }
 
-    pub fn broadcast_world(&self, world_name: &str, packet: Packet) {
+    pub fn broadcast_world(&self, host: &mut enet::Host<()>, world_name: &str, packet: Packet) {
         if self.active_world.exists(world_name) {
             let world = self.active_world.get::<ActiveWorld>(world_name).unwrap();
             for player in world.players {
-                let peer = self.enet_host.peer_mut(player.connect_id).unwrap();
+                let peer = host.peer_mut(player.connect_id).unwrap();
                 packet.send(peer);
             }
         }

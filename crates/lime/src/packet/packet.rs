@@ -61,7 +61,7 @@ impl Packet {
     }
 
     /// Create a new encrypted packet
-    pub fn new_encrypted(d: PacketData, packet_mode: PacketMode) -> Self {
+    pub fn new_encrypted(d: PacketData, packet_mode: PacketMode) {
 
     }
 
