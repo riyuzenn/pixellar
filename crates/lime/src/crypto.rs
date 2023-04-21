@@ -1,12 +1,11 @@
-
-use ecies_ed25519::{SecretKey, PublicKey, generate_keypair, encrypt, decrypt};
-use rand::{self, rngs::ThreadRng};
 use anyhow::Context;
+use ecies_ed25519::{decrypt, encrypt, generate_keypair, PublicKey, SecretKey};
+use rand::{self, rngs::ThreadRng};
 
 pub struct LimeE {
     sk: SecretKey,
     pk: PublicKey,
-    rng: ThreadRng
+    rng: ThreadRng,
 }
 
 impl LimeE {
@@ -16,7 +15,7 @@ impl LimeE {
         Self {
             sk: _sk,
             pk: _pk,
-            rng: _rng
+            rng: _rng,
         }
     }
     pub fn from(secet_key: SecretKey, public_key: PublicKey) -> Self {
@@ -24,7 +23,7 @@ impl LimeE {
         Self {
             sk: secet_key,
             pk: public_key,
-            rng: _rng
+            rng: _rng,
         }
     }
     pub fn encrypt(&mut self, data: String) -> Vec<u8> {
@@ -37,8 +36,8 @@ impl LimeE {
         String::from_utf8(
             decrypt(&self.sk, &data)
                 .context("Failed to decrypt the data")
-                .unwrap()
-        ).unwrap()
+                .unwrap(),
+        )
+        .unwrap()
     }
-
 }

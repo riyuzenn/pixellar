@@ -1,12 +1,11 @@
-
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum ItemType {
     WEARABLE,
     BLOCK,
     DECOR,
-    WALL
+    WALL,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -15,7 +14,7 @@ pub enum ItemRarity {
     BASIC,
     RARE,
     ULTRARARE,
-    LEGENDARY
+    LEGENDARY,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -26,6 +25,3 @@ pub struct Item {
     pub r#type: ItemType,
     pub rarity: ItemRarity,
 }
-
-
-

@@ -1,15 +1,15 @@
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 pub mod active;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct WorldItem {
     background: i32,
-    foreground: i32
+    foreground: i32,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct World {
     name: &'static str,
     item: Vec<WorldItem>,
-} 
+}

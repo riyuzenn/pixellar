@@ -11,17 +11,14 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-use anyhow::{
-    Result,
-    Context
-};
+use anyhow::{Context, Result};
 use colored::Colorize;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Version {
@@ -40,9 +37,13 @@ impl Version {
     }
 
     pub fn from(s: &str) -> Result<Version> {
-        let v: Vec<u8> = s.split(".")
-            .map(|x| x.parse::<u8>()
-            .context(format!("{}", "Cannot convert str to u8".red())).unwrap())
+        let v: Vec<u8> = s
+            .split(".")
+            .map(|x| {
+                x.parse::<u8>()
+                    .context(format!("{}", "Cannot convert str to u8".red()))
+                    .unwrap()
+            })
             .collect();
 
         Ok(Version {
@@ -62,9 +63,9 @@ impl Version {
 
         let m = a.iter().zip(b.iter()).filter(|&(a, b)| a == b).count();
         if m == 3 {
-            return true
+            return true;
         } else {
-            return false
+            return false;
         }
     }
 
@@ -72,4 +73,3 @@ impl Version {
         vec![self.major, self.minor, self.patch]
     }
 }
-

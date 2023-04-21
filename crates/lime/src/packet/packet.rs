@@ -11,16 +11,16 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-use serde::{Serialize, Deserialize};
 use enet::PacketMode;
+use serde::{Deserialize, Serialize};
 
-use anyhow::Result;
-use crate::utils::Version;
 use crate::packet::r#type::PacketType;
+use crate::utils::Version;
+use anyhow::Result;
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct PacketData {
@@ -38,10 +38,10 @@ impl PacketData {
         }
     }
 
-    pub fn build(&self) -> Result<Vec<u8>, String> { 
+    pub fn build(&self) -> Result<Vec<u8>, String> {
         match serde_json::to_string(&self) {
             Ok(data) => Ok(data.into_bytes()),
-            Err(err) => Err(err.to_string())
+            Err(err) => Err(err.to_string()),
         }
     }
 }
@@ -55,17 +55,11 @@ impl Packet {
         let data = d.build().unwrap();
 
         let p = enet::Packet::new(data, packet_mode).unwrap();
-        Packet {
-            pkt: p
-        }
+        Packet { pkt: p }
     }
 
     /// Create a new encrypted packet
-    pub fn new_encrypted(d: PacketData, packet_mode: PacketMode) {
+    pub fn new_encrypted(d: PacketData, packet_mode: PacketMode) {}
 
-    }
-
-    pub fn send(&self, peer: &mut enet::Peer<()>) {
-        
-    }
+    pub fn send(&self, peer: &mut enet::Peer<()>) {}
 }

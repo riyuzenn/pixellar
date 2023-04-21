@@ -11,7 +11,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -20,25 +20,26 @@ use strip_ansi_escapes;
 
 fn strlen(s: &str) -> usize {
     strip_ansi_escapes::strip(&s.as_bytes()).unwrap().len()
-} 
+}
 
 pub fn say(text: &str) {
     let len = strlen(text);
- 
+
     let mut forward = String::from("");
-    forward.push_str(&String::from("-").repeat((len/2) - 1));
+    forward.push_str(&String::from("-").repeat((len / 2) - 1));
     forward.push_str(">");
-    forward.push_str(&String::from("-").repeat(len/2));
-    
+    forward.push_str(&String::from("-").repeat(len / 2));
+
     let mut backward = String::from("");
-    backward.push_str(&String::from("-").repeat((len/2) - 1));
+    backward.push_str(&String::from("-").repeat((len / 2) - 1));
     backward.push_str("<");
-    backward.push_str(&String::from("-").repeat(len/2));
-    
+    backward.push_str(&String::from("-").repeat(len / 2));
+
     let mut space = String::from("");
     space.push_str(&String::from(" ").repeat(len - 2));
 
-    println!(r#"
+    println!(
+        r#"
 |{0}>|
 | {1} |
 | {2} |
@@ -49,6 +50,11 @@ pub fn say(text: &str) {
 {{\_/}} ||
 (. .)
 / > {4} 
-    "#, forward, space, text.green(), backward, "♡".red());
+    "#,
+        forward,
+        space,
+        text.green(),
+        backward,
+        "♡".red()
+    );
 }
-

@@ -11,7 +11,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -21,19 +21,16 @@ use crate::utils::host_to_vec;
 
 pub struct Address {
     pub host: Ipv4Addr,
-    pub port: u16
+    pub port: u16,
 }
 
 impl Address {
     pub fn new(h: &str, p: u16) -> Self {
-        
         let hv = host_to_vec(h).unwrap();
 
         Address {
             host: Ipv4Addr::new(hv[0], hv[1], hv[2], hv[3]),
-            port: p
+            port: p,
         }
     }
-   
 }
-

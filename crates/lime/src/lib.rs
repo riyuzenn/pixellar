@@ -11,20 +11,20 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-pub mod utils;
-pub mod server;
 pub mod address;
-pub mod packet;
-pub mod data;
 pub mod crypto;
+pub mod data;
+pub mod packet;
+pub mod server;
+pub mod utils;
 
 pub use crate::address::Address;
 pub use crate::packet::packet::PacketData;
 pub use crate::server::Server;
-pub use crate::utils::Version;
 pub use crate::utils::bunny;
+pub use crate::utils::Version;

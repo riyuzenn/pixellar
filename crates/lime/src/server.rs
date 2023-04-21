@@ -11,24 +11,18 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-use enet::*;
-use pickledb::PickleDb;
-use std::{net::Ipv4Addr, time::Duration};
 use anyhow::Context;
 use colored::Colorize;
-use log::{
-    warn,
-    info,
-    debug,
-    error
-};
+use enet::*;
+use log::{debug, error, info, warn};
+use pickledb::PickleDb;
+use std::{net::Ipv4Addr, time::Duration};
 
-
-use crate::{Version, utils::load_db, data::active::ActiveWorld, packet::Packet};
+use crate::{data::active::ActiveWorld, packet::Packet, utils::load_db, Version};
 
 pub struct Server {
     host: Ipv4Addr,
@@ -38,7 +32,7 @@ pub struct Server {
     debug: bool,
     version: Version,
     active_player: PickleDb,
-    active_world: PickleDb
+    active_world: PickleDb,
 }
 
 #[allow(dead_code)]
@@ -46,20 +40,14 @@ enum Log {
     INFO,
     DEBUG,
     WARN,
-    ERROR
+    ERROR,
 }
 
 impl Server {
-    pub fn new(
-        host: Ipv4Addr,
-        port: u16,
-        peer_count: u64,
-        debug: bool,
-        v: Version, 
-
-    ) -> Self {
-
-        let enet_obj = Enet::new().context("Failed to initialize ENet object").unwrap();
+    pub fn new(host: Ipv4Addr, port: u16, peer_count: u64, debug: bool, v: Version) -> Self {
+        let enet_obj = Enet::new()
+            .context("Failed to initialize ENet object")
+            .unwrap();
         let active_player = load_db("active_player").unwrap();
         let active_world = load_db("active_world").unwrap();
 
@@ -71,41 +59,42 @@ impl Server {
             version: v,
             enet: enet_obj,
             active_player: active_player,
-            active_world: active_world
+            active_world: active_world,
         }
     }
 
     pub fn run_server(self, duration: u64) {
-        let mut host = self.enet.create_host::<()>(
+        let mut host = self
+            .enet
+            .create_host::<()>(
+                Some(&Address::new(self.host, self.port)),
+                self.peer_count,
+                ChannelLimit::Maximum,
+                BandwidthLimit::Unlimited,
+                BandwidthLimit::Unlimited,
+            )
+            .context("Failed to create ENet host")
+            .unwrap();
 
-            Some(&Address::new(self.host, self.port)),
-            self.peer_count,
-            ChannelLimit::Maximum,
-            BandwidthLimit::Unlimited,
-            BandwidthLimit::Unlimited
+        host.set_checksum_crc32();
 
-        ).context("Failed to create ENet host").unwrap();
-
-        host.set_checksum_crc32(); 
-        
         self.log(
-            &format!("Server service {0}. Listening to {1}", 
-                "started".green(), 
+            &format!(
+                "Server service {0}. Listening to {1}",
+                "started".green(),
                 "events".yellow()
-            ), 
-            Log::INFO
+            ),
+            Log::INFO,
         );
 
         loop {
-        
             if let Some(event) = host
                 .service(Duration::from_secs(duration))
-                .context("Service failure").unwrap()
-
+                .context("Service failure")
+                .unwrap()
             {
                 self.log("Receive new event", Log::INFO);
                 match event.r#type() {
-                    
                     &EventType::Connect => self.handle_connection(event),
                     &EventType::Disconnect { .. } => println!("disconnect!"),
                     &EventType::Receive {
@@ -115,25 +104,24 @@ impl Server {
                         "got packet on channel {}, content: '{}'",
                         channel_id,
                         std::str::from_utf8(packet.data()).unwrap()
-                        
                     ),
                 }
             }
         }
-        
     }
 
     /// When the client first connect, send a handshake logic
     /// to determine if the connection is secure and legitimate.
     fn handle_connection(&self, event: Event<()>) {
-        let peer = event.peer(); 
+        let peer = event.peer();
         self.log(
-            &format!("New connection: {}:{}", 
-                peer.address().ip(), 
+            &format!(
+                "New connection: {}:{}",
+                peer.address().ip(),
                 peer.address().port()
             ),
-        Log::INFO);
-        
+            Log::INFO,
+        );
     }
 
     fn handle_receive_packet(&self, channel_id: &u8, pkt: &Packet, event: &Event<()>) {
@@ -149,7 +137,7 @@ impl Server {
             }
         }
     }
-    
+
     fn log(&self, msg: &str, r#type: Log) {
         if self.debug {
             match r#type {
