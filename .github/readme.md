@@ -13,7 +13,11 @@ A simple toy game server written in Rust to test my skill in networking.
 </table>
 </div>
 
-
+## Structure
+| Codebase | Description |
+|--|--|
+| [lime](https://github.com/riyuzenn/pixellar/tree/master/crates/lime) | Server framework based on the [enet-rs](https://github.com/riyuzenn/enet-rs) <sup>[bin]</sup> |
+| [server](https://github.com/riyuzenn/pixellar/tree/master/crates/server) | CLI app for running the server <sup>[lib]</sup> |
 
 ## Features
 * [x] idk, it should work
