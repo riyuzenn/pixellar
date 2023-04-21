@@ -115,6 +115,7 @@ impl Server {
                         "got packet on channel {}, content: '{}'",
                         channel_id,
                         std::str::from_utf8(packet.data()).unwrap()
+                        
                     ),
                 }
             }
@@ -133,6 +134,10 @@ impl Server {
             ),
         Log::INFO);
         
+    }
+
+    fn handle_receive_packet(&self, channel_id: &u8, pkt: &Packet, event: &Event<()>) {
+        // println!("Packet received: {} from channel: {}", std::str::from_utf8(pkt), channel_id)
     }
 
     pub fn broadcast_world(&self, host: &mut enet::Host<()>, world_name: &str, packet: Packet) {
