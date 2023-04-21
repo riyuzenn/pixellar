@@ -36,7 +36,7 @@ lint:
 	@cargo clippy --fix -Z unstable-options
 	@cargo clippy --all-targets --all-features -- -D warnings
 
-style:
+format:
 	@cargo fmt
 
 doc:
