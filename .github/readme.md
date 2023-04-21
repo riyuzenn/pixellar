@@ -1,5 +1,7 @@
 ## Pixellar
-> NOTE: I only work on this project with my spare time
+> if there is no commit for a year, probably another dead project of mine  
+
+<br />
 
 A simple toy game server written in Rust to test my skill in networking.
 
