@@ -124,10 +124,28 @@ impl Server {
         );
     }
 
+    /// When the client sends data, parse and handle the packet data
     fn handle_receive_packet(&self, channel_id: &u8, pkt: &Packet, event: &Event<()>) {
         // println!("Packet received: {} from channel: {}", std::str::from_utf8(pkt), channel_id)
     }
 
+    /// Broadcast the packet to all peers in the same world
+    /// 
+    /// The world act as a miniserver that handles all the data
+    /// send by each client.
+    ///
+    /// Diagram shows the structure
+    /// 
+    ///
+    ///            ┌───────┐
+    ///            │ World │ 
+    ///            └───┬───┘
+    ///                │
+    ///     ┌──────────┴───────────┐
+    ///     │                      │
+    /// ┌───┴───┐              ┌───┴───┐
+    /// │ Alice │              │  Bob  │
+    /// └───────┘              └───────┘
     pub fn broadcast_world(&self, host: &mut enet::Host<()>, world_name: &str, packet: Packet) {
         if self.active_world.exists(world_name) {
             let world = self.active_world.get::<ActiveWorld>(world_name).unwrap();
