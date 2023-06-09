@@ -132,7 +132,7 @@ impl Server {
     /// Broadcast the packet to all peers in the same world
     /// 
     /// The world act as a miniserver that handles all the data
-    /// send by each client.
+    /// sent by each client.
     ///
     /// Diagram shows the structure
     /// 
